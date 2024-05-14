@@ -29,6 +29,11 @@ class HashtagNotFound(BaseExistsException):
     detail = "Хэштег не найден"
 
 
+class PostNotFound(BaseExistsException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Пост не найден"
+
+
 class IncorrectEmailOrPasswordException(BaseExistsException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Неверное имя или пароль"

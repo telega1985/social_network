@@ -1,6 +1,8 @@
 from sqlalchemy import select, insert, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from typing import Any, Dict, List
+
 
 class BaseDAO:
     model = None
@@ -14,6 +16,12 @@ class BaseDAO:
     @classmethod
     async def find_all(cls, session: AsyncSession):
         query = select(cls.model)
+        result = await session.execute(query)
+        return result.scalars().all()
+
+    @classmethod
+    async def find_all_filter_by(cls, session: AsyncSession, **filter_by):
+        query = select(cls.model).filter_by(**filter_by)
         result = await session.execute(query)
         return result.scalars().all()
 
@@ -35,15 +43,11 @@ class BaseDAO:
         await session.execute(query)
 
     @classmethod
-    async def add_many(cls, session: AsyncSession, data: list[dict[str, int]], return_ids: bool = False):
+    async def add_many(cls, session: AsyncSession, data: List[Dict[str, Any]]):
         """
         Добавляет множество записей
         """
-        query = insert(cls.model).values(data)
+        query = insert(cls.model).returning(cls.model)
+        result = await session.execute(query, data)
 
-        if return_ids:
-            query = query.returning(cls.model.id)
-            result = await session.execute(query, data)
-            return result.scalars().all()
-
-        await session.execute(query)
+        return result.scalars().all()

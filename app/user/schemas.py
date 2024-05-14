@@ -6,9 +6,23 @@ from app.user.models import Gender
 from typing import Optional
 
 
+class SFollowInfo(BaseModel):
+    follower_id: int
+    following_id: int
+
+
+class SUserLiked(BaseModel):
+    id: int
+    first_name: Optional[str] = Field(None)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class SUserCreate(BaseModel):
     email: EmailStr
     password: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SUserBase(BaseModel):
@@ -27,8 +41,6 @@ class SUserBase(BaseModel):
 class SUserUpdate(SUserBase):
     password: Optional[str] = None
 
-    model_config = ConfigDict(from_attributes=True)
-
 
 class SUserInfo(SUserBase):
     id: int
@@ -36,9 +48,9 @@ class SUserInfo(SUserBase):
     created_at: datetime
     image: Optional[str]
 
-    model_config = ConfigDict(from_attributes=True)
-
 
 class SToken(BaseModel):
     access_token: str
     refresh_token: uuid.UUID
+
+    model_config = ConfigDict(from_attributes=True)

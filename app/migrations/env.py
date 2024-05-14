@@ -10,8 +10,9 @@ from alembic import context
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from app.database import Base, DATABASE_URL
-from app.user.models import User, RefreshSession, VerificationSession
+from app.user.models import User, RefreshSession, VerificationSession, Follow
 from app.post.models import PostHashtagAssociation, PostLikesAssociation, PostImage, Post, Hashtag
+from app.activity.models import Activity
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
